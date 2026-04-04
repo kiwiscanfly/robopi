@@ -9,6 +9,7 @@ Raspberry Pi 4, documented as working code and notes.
 - OS: Raspberry Pi OS Lite 64-bit (Debian Trixie)
 
 ## setup
+
 ```bash
 ssh rebecca@robopi.local
 ```
@@ -23,4 +24,4 @@ ssh rebecca@robopi.local
 ## notes
 
 - GPIO library: lgpio (RPi.GPIO is deprecated on Trixie)
-- ROS 2 distribution target: Jazzy Jalisco via rospian apt repo
+- ROS 2 distribution target: Jazzy Jalisco via [rospian](https://github.com/rospian/rospian-repo) apt repo
