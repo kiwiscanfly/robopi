@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Deploy to Pi",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/deploy.sh",
+      "args": ["${relativeFile}"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Deploy and Run on Pi",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/deploy-run.sh",
+      "args": ["${relativeFile}"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
