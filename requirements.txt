@@ -1,0 +1,15 @@
+# Python dependencies for robot-experiments
+#
+# --- GPIO (apt preferred on Trixie) ---
+# sudo apt install python3-lgpio python3-gpiozero
+# colorzero is pulled in automatically as a gpiozero dependency.
+#
+# --- SunFounder Robot HAT ---
+# Installed from source — see scripts/setup-pi.sh
+# https://github.com/sunfounder/robot-hat
+# Requires I2C enabled on the Pi (setup-pi.sh handles this).
+#
+# Pip packages installed into ~/robot-venv on the Pi (see scripts/setup-pi.sh):
+setuptools>=69.0
+pyaudio>=0.2.14
+robot-hat>=2.3.0

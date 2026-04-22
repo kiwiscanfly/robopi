@@ -1,0 +1,15 @@
+# Local development dependencies (macOS / dev machine)
+# Sets up linting and import resolution for VS Code.
+#
+# Setup:
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r requirements-dev.txt
+#
+# Note: lgpio and robot_hat are Linux/Pi-only and won't install here.
+# Imports from those packages will show as unresolved in the editor — that's expected.
+
+ruff>=0.4
+
+# Pi runtime packages that also install on macOS (improves import resolution)
+gpiozero>=2.0
+colorzero>=2.0

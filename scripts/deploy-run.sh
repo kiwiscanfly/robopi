@@ -34,4 +34,4 @@ ssh "$PI_USER@$PI_HOST" "mkdir -p $REMOTE_DIR"
 scp "$FILE" "$PI_USER@$PI_HOST:$REMOTE_PATH"
 
 echo "Running $REMOTE_PATH on $PI_HOST..."
-ssh -t "$PI_USER@$PI_HOST" "python3 $REMOTE_PATH"
+ssh -t "$PI_USER@$PI_HOST" "~/robot-venv/bin/python3 $REMOTE_PATH"
