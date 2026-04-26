@@ -15,6 +15,7 @@ lgpio>=0.2
 gpiozero>=2.0
 colorzero>=2.0
 pyaudio>=0.2.14
+picamera2>=0.3
 # robot-hat: installed from source (branch 2.5.x) — see scripts/setup-pi.sh
 # pidog:     installed from source — see scripts/setup-pi.sh
 # vilib:     installed via its own install.py (system-level) — see scripts/setup-pi.sh
