@@ -5,6 +5,7 @@
 
 import time
 from pidog import Pidog
+from robot_hat.music import disable_speaker
 
 HOLD_TIME = 3  # seconds to show each effect
 
@@ -21,6 +22,7 @@ EFFECTS = [
 def main():
     print("Initialising PiDog...")
     dog = Pidog()
+    disable_speaker()
     time.sleep(0.5)
 
     print("RGB LED test — press Enter to advance through each effect.\n")

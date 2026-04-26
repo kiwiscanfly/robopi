@@ -6,6 +6,7 @@
 
 import time
 from pidog import Pidog
+from robot_hat.music import disable_speaker
 
 LOOP_DELAY = 0.1  # seconds between readings
 
@@ -13,14 +14,9 @@ LOOP_DELAY = 0.1  # seconds between readings
 def main():
     print("Initialising PiDog...")
     dog = Pidog()
-    dog.music.music_stop()
-    dog.music.music_set_volume(0)
+    disable_speaker()
     time.sleep(0.5)
     print("PiDog initialised.")
-    print("\nReading sensors — Ctrl+C to stop.\n")
-    print(f"{'Touch L':<12}{'Touch R':<12}{'Distance (cm)':<16}")
-    print("-" * 40)
-
     print("\nReading sensors — Ctrl+C to stop.\n")
     print(f"{'Touch L':<12}{'Touch R':<12}{'Distance (cm)':<16}")
     print("-" * 40)

@@ -7,6 +7,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from pidog import Pidog
+from robot_hat.music import disable_speaker
 
 
 PUBLISH_RATE_HZ = 20
@@ -17,8 +18,7 @@ class TouchNode(Node):
         super().__init__('touch_node')
         self.publisher = self.create_publisher(String, '/pidog/touch', 10)
         self.dog = Pidog()
-        self.dog.music.music_stop()
-        self.dog.music.music_set_volume(0)
+        disable_speaker()
         self.last_state = 'N'
         self.timer = self.create_timer(1.0 / PUBLISH_RATE_HZ, self.publish_reading)
         self.get_logger().info('Touch node started, publishing on /pidog/touch')

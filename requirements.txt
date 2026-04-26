@@ -15,7 +15,17 @@ lgpio>=0.2
 gpiozero>=2.0
 colorzero>=2.0
 pyaudio>=0.2.14
-picamera2>=0.3
+pygame>=2.0
+# vilib pip dependencies (vilib itself is installed from source — see setup-pi.sh)
+flask>=2.0
+imutils>=0.5
+qrcode>=7.0
+pyzbar>=0.1.9
+readchar>=4.0
+protobuf>=3.20.0
+numpy>=1.23
+# picamera2 and libcamera are apt-only (native C++ bindings) — accessed via
+# the system-site-packages.pth file written by setup-pi.sh.
 # robot-hat: installed from source (branch 2.5.x) — see scripts/setup-pi.sh
 # pidog:     installed from source — see scripts/setup-pi.sh
 # vilib:     installed via its own install.py (system-level) — see scripts/setup-pi.sh

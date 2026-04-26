@@ -5,11 +5,25 @@
 #   python3 -m venv .venv
 #   .venv/bin/pip install -r requirements-dev.txt
 #
-# Note: lgpio and robot_hat are Linux/Pi-only and won't install here.
-# Imports from those packages will show as unresolved in the editor — that's expected.
+# Packages that won't install on macOS (Linux kernel interfaces — unresolved in editor):
+#   lgpio, spidev, smbus
+# Packages that require Homebrew first:
+#   pyaudio  →  brew install portaudio
+#   pyzbar   →  brew install zbar
 
 ruff>=0.4
 
-# Pi runtime packages that also install on macOS (improves import resolution)
+# Shared with requirements.txt — install here for import resolution
+setuptools>=69.0,<80.0
+smbus2>=0.4
 gpiozero>=2.0
 colorzero>=2.0
+pygame>=2.0
+flask>=2.0
+imutils>=0.5
+qrcode>=7.0
+readchar>=4.0
+protobuf>=3.20.0
+numpy>=1.23
+pyaudio>=0.2.14
+pyzbar>=0.1.9

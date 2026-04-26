@@ -72,6 +72,15 @@ ssh -t "$PI_USER@$PI_HOST" bash <<'REMOTE'
   echo "--- ROS 2 Jazzy + conda environment ---"
   bash "$HOME/install-ros2.sh"
 
+  # Give the conda env access to apt-installed Python packages (libcamera,
+  # picamera2, etc.) that have no PyPI equivalent.
+  PTH_FILE="$HOME/miniforge3/envs/ros_env/lib/python3.11/site-packages/system-site-packages.pth"
+  if [[ ! -f "$PTH_FILE" ]]; then
+    echo "--- Adding system site-packages to conda env ---"
+    echo "/usr/lib/python3/dist-packages" > "$PTH_FILE"
+    echo "/usr/lib/python3.11/dist-packages" >> "$PTH_FILE"
+  fi
+
   # install-ros2.sh sets up the conda env — pip installs below go into it
   echo "--- Installing pip packages into conda env ---"
   "$CONDA_PIP" install -q -r "$HOME/requirements.txt"

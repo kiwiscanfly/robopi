@@ -6,6 +6,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Range
 from pidog import Pidog
+from robot_hat.music import disable_speaker
 import math
 
 
@@ -19,8 +20,7 @@ class UltrasonicNode(Node):
         super().__init__('ultrasonic_node')
         self.publisher = self.create_publisher(Range, '/pidog/ultrasonic', 10)
         self.dog = Pidog()
-        self.dog.music.music_stop()
-        self.dog.music.music_set_volume(0)
+        disable_speaker()
         self.timer = self.create_timer(1.0 / PUBLISH_RATE_HZ, self.publish_reading)
         self.get_logger().info('Ultrasonic node started, publishing on /pidog/ultrasonic')
 

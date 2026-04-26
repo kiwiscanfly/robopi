@@ -11,6 +11,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 from std_msgs.msg import String
 from pidog import Pidog
+from robot_hat.music import disable_speaker
 import time
 
 
@@ -33,8 +34,7 @@ class MovementNode(Node):
     def __init__(self):
         super().__init__('movement_node')
         self.dog = Pidog()
-        self.dog.music.music_stop()
-        self.dog.music.music_set_volume(0)
+        disable_speaker()
 
         self.cmd_vel_sub = self.create_subscription(
             Twist, '/pidog/cmd_vel', self.on_cmd_vel, 10)
