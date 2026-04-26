@@ -56,7 +56,7 @@ ssh -t "$PI_USER@$PI_HOST" bash <<'REMOTE'
   }
 
   # System libraries needed to build C extensions — not Python packages
-  APT_PACKAGES=(python3-smbus python3-pip git portaudio19-dev python3-dev i2c-tools)
+  APT_PACKAGES=(python3-smbus python3-pip git portaudio19-dev python3-dev i2c-tools libcap-dev)
 
   if apt_missing "${APT_PACKAGES[@]}"; then
     echo "--- Installing apt packages ---"
