@@ -1,15 +1,20 @@
 # Python dependencies for robot-experiments
 #
-# --- GPIO (apt preferred on Trixie) ---
-# sudo apt install python3-lgpio python3-gpiozero
-# colorzero is pulled in automatically as a gpiozero dependency.
+# All packages are installed into the conda ros_env environment by
+# scripts/setup-pi.sh. There is no separate venv.
 #
-# --- SunFounder Robot HAT ---
-# Installed from source — see scripts/setup-pi.sh
-# https://github.com/sunfounder/robot-hat
-# Requires I2C enabled on the Pi (setup-pi.sh handles this).
+# --- Installed via apt (system libraries required for C extensions) ---
+# sudo apt install portaudio19-dev python3-dev i2c-tools
 #
-# Pip packages installed into ~/robot-venv on the Pi (see scripts/setup-pi.sh):
-setuptools>=69.0
+# --- Installed via pip into ~/miniforge3/envs/ros_env ---
+setuptools>=69.0,<80.0
+smbus2>=0.4
+smbus>=1.1
+spidev>=3.5
+lgpio>=0.2
+gpiozero>=2.0
+colorzero>=2.0
 pyaudio>=0.2.14
-robot-hat>=2.3.0
+# robot-hat: installed from source (branch 2.5.x) — see scripts/setup-pi.sh
+# pidog:     installed from source — see scripts/setup-pi.sh
+# vilib:     installed via its own install.py (system-level) — see scripts/setup-pi.sh
