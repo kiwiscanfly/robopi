@@ -62,6 +62,14 @@ else
   echo "  colcon already installed."
 fi
 
+# Install rosbridge_server if not present
+if ! conda list -n "$ROS_ENV" | grep -q "^ros-jazzy-rosbridge-server "; then
+  echo "  Installing rosbridge_server..."
+  mamba install -y ros-jazzy-rosbridge-server
+else
+  echo "  rosbridge_server already installed."
+fi
+
 # Add conda activation + ROS 2 source to .bashrc if not already there
 if ! grep -q "ros_env" "$HOME/.bashrc"; then
   cat >> "$HOME/.bashrc" <<'BASHRC'

@@ -19,12 +19,19 @@ class CameraNode(Node):
         super().__init__('camera_node')
         self.publisher = self.create_publisher(Image, '/pidog/camera/image_raw', 10)
         Vilib.camera_start(vflip=False, hflip=False)
+        Vilib.display(local=False, web=True)
         self.timer = self.create_timer(1.0 / PUBLISH_RATE_HZ, self.publish_frame)
-        self.get_logger().info('Camera node started, publishing on /pidog/camera/image_raw')
+        self.get_logger().info('Camera node started — ROS topic: /pidog/camera/image_raw'
+                               ' — web stream: http://robopi.local:9000/mjpg')
 
     def publish_frame(self):
-        frame = Vilib.img
-        if frame is None:
+        raw = Vilib.img
+        if raw is None or len(raw) == 0 or raw[0] is None:
+            return
+
+        frame = np.array(raw[0], dtype=np.uint8)
+
+        if frame.ndim != 3:
             return
 
         msg = Image()

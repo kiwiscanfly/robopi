@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PiDog Control</title>
+  <script src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
+      color: #a0c4ff;
+      margin-bottom: 12px;
+    }
+
+    #status-bar {
+      text-align: center;
+      font-size: 0.75rem;
+      margin-bottom: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: #2a2a4e;
+    }
+    #status-bar.connected { color: #4ade80; }
+    #status-bar.disconnected { color: #f87171; }
+
+    #camera {
+      width: 100%;
+      max-width: 640px;
+      display: block;
+      margin: 0 auto 12px;
+      border-radius: 8px;
+      border: 2px solid #2a2a4e;
+      background: #000;
+    }
+
+    .panel-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: #16213e;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .panel h2 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #a0c4ff;
+      margin-bottom: 10px;
+    }
+
+    .sensor-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      padding: 3px 0;
+      border-bottom: 1px solid #2a2a4e;
+    }
+    .sensor-row:last-child { border-bottom: none; }
+    .sensor-val { color: #4ade80; font-variant-numeric: tabular-nums; }
+
+    /* Action buttons */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+
+    button {
+      background: #2a2a4e;
+      color: #e0e0e0;
+      border: 1px solid #3a3a6e;
+      border-radius: 5px;
+      padding: 6px 4px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      transition: background 0.1s;
+      white-space: nowrap;
+    }
+    button:hover { background: #3a3a6e; }
+    button:active { background: #a0c4ff; color: #1a1a2e; }
+
+    /* D-pad */
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 4px;
+      width: 120px;
+      margin: 0 auto 8px;
+    }
+    .dpad button { padding: 8px; font-size: 1rem; }
+    .dpad .center { background: #1a1a2e; }
+
+    /* Head controls */
+    .head-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      width: 100px;
+      margin: 0 auto;
+    }
+    .head-grid button { padding: 6px; font-size: 0.9rem; }
+    .head-label {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #a0c4ff;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>PiDog Control Panel</h1>
+<div id="status-bar" class="disconnected">Connecting to rosbridge...</div>
+
+<img id="camera" src="http://robopi.local:9000/mjpg" alt="Camera feed">
+
+<div class="panel-row">
+
+  <!-- Sensors -->
+  <div class="panel">
+    <h2>Sensors</h2>
+    <div class="sensor-row"><span>Distance</span><span class="sensor-val" id="s-dist">—</span></div>
+    <div class="sensor-row"><span>Touch</span><span class="sensor-val" id="s-touch">—</span></div>
+    <div class="sensor-row"><span>Battery</span><span class="sensor-val" id="s-batt">—</span></div>
+    <div class="sensor-row"><span>Sound dir</span><span class="sensor-val" id="s-sound">—</span></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="panel">
+    <h2>Actions</h2>
+    <div class="action-grid">
+      <button onclick="action('sit')">sit</button>
+      <button onclick="action('stand')">stand</button>
+      <button onclick="action('nod')">nod</button>
+      <button onclick="action('hand_shake')">shake</button>
+      <button onclick="action('howling')">howl</button>
+      <button onclick="action('push_up')">push up</button>
+      <button onclick="action('stretch')">stretch</button>
+      <button onclick="action('bark')">bark</button>
+      <button onclick="action('alert')">alert</button>
+    </div>
+
+    <h2>Move</h2>
+    <div class="dpad">
+      <div></div>
+      <button onmousedown="startMove(0.6,0)" onmouseup="stopMove()" onmouseleave="stopMove()">↑</button>
+      <div></div>
+      <button onmousedown="startMove(0,-0.6)" onmouseup="stopMove()" onmouseleave="stopMove()">←</button>
+      <button class="center" onclick="stopMove()">■</button>
+      <button onmousedown="startMove(0,0.6)" onmouseup="stopMove()" onmouseleave="stopMove()">→</button>
+      <div></div>
+      <button onmousedown="startMove(-0.6,0)" onmouseup="stopMove()" onmouseleave="stopMove()">↓</button>
+      <div></div>
+    </div>
+
+    <div class="head-label">Head</div>
+    <div class="head-grid">
+      <div></div>
+      <button onclick="head(0,20,0)">↑</button>
+      <div></div>
+      <button onclick="head(0,0,-20)">←</button>
+      <button onclick="head(0,0,0)">●</button>
+      <button onclick="head(0,0,20)">→</button>
+      <div></div>
+      <button onclick="head(0,-20,0)">↓</button>
+      <div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const ROS_HOST = window.location.hostname;
+  const ROSBRIDGE_URL = `ws://${ROS_HOST}:9090`;
+
+  const ros = new ROSLIB.Ros({ url: ROSBRIDGE_URL });
+
+  ros.on('connection', () => {
+    const bar = document.getElementById('status-bar');
+    bar.textContent = `Connected to ${ROSBRIDGE_URL}`;
+    bar.className = 'connected';
+  });
+
+  ros.on('error', () => {
+    document.getElementById('status-bar').textContent = 'rosbridge connection error';
+    document.getElementById('status-bar').className = 'disconnected';
+  });
+
+  ros.on('close', () => {
+    document.getElementById('status-bar').textContent = 'Disconnected — retrying...';
+    document.getElementById('status-bar').className = 'disconnected';
+    setTimeout(() => ros.connect(ROSBRIDGE_URL), 3000);
+  });
+
+  // ── Publishers ──────────────────────────────────────────────────────────────
+
+  const cmdAction = new ROSLIB.Topic({
+    ros, name: '/pidog/cmd_action', messageType: 'std_msgs/String'
+  });
+
+  const cmdVel = new ROSLIB.Topic({
+    ros, name: '/pidog/cmd_vel', messageType: 'geometry_msgs/Twist'
+  });
+
+  const cmdHead = new ROSLIB.Topic({
+    ros, name: '/pidog/cmd_head', messageType: 'geometry_msgs/Vector3'
+  });
+
+  // ── Subscribers ─────────────────────────────────────────────────────────────
+
+  new ROSLIB.Topic({ ros, name: '/pidog/ultrasonic', messageType: 'sensor_msgs/Range' })
+    .subscribe(msg => {
+      document.getElementById('s-dist').textContent = msg.range.toFixed(2) + ' m';
+    });
+
+  new ROSLIB.Topic({ ros, name: '/pidog/touch', messageType: 'std_msgs/String' })
+    .subscribe(msg => {
+      document.getElementById('s-touch').textContent = msg.data;
+    });
+
+  new ROSLIB.Topic({ ros, name: '/pidog/battery', messageType: 'std_msgs/Float32' })
+    .subscribe(msg => {
+      document.getElementById('s-batt').textContent = msg.data.toFixed(1) + ' V';
+    });
+
+  new ROSLIB.Topic({ ros, name: '/pidog/sound_direction', messageType: 'std_msgs/Float32' })
+    .subscribe(msg => {
+      const val = msg.data < 0 ? '—' : msg.data.toFixed(0) + '°';
+      document.getElementById('s-sound').textContent = val;
+    });
+
+  // ── Control functions ────────────────────────────────────────────────────────
+
+  function action(name) {
+    cmdAction.publish(new ROSLIB.Message({ data: name }));
+  }
+
+  let moveInterval = null;
+
+  function startMove(linear, angular) {
+    stopMove();
+    const publish = () => cmdVel.publish(new ROSLIB.Message({
+      linear: { x: linear, y: 0, z: 0 },
+      angular: { x: 0, y: 0, z: angular }
+    }));
+    publish();
+    moveInterval = setInterval(publish, 200);
+  }
+
+  function stopMove() {
+    if (moveInterval) { clearInterval(moveInterval); moveInterval = null; }
+    cmdVel.publish(new ROSLIB.Message({
+      linear: { x: 0, y: 0, z: 0 },
+      angular: { x: 0, y: 0, z: 0 }
+    }));
+  }
+
+  function head(roll, pitch, yaw) {
+    cmdHead.publish(new ROSLIB.Message({ x: roll, y: pitch, z: yaw }));
+  }
+</script>
+</body>
+</html>

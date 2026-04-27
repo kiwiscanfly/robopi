@@ -1,0 +1,13 @@
+[Unit]
+Description=PiDog ROS 2
+After=network.target
+
+[Service]
+User=rebecca
+WorkingDirectory=/home/rebecca
+ExecStart=/home/rebecca/start-pidog.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

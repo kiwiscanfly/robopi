@@ -21,11 +21,8 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
-            'ultrasonic_node = pidog_ros2.ultrasonic_node:main',
-            'imu_node = pidog_ros2.imu_node:main',
-            'touch_node = pidog_ros2.touch_node:main',
+            'pidog_node = pidog_ros2.pidog_node:main',
             'camera_node = pidog_ros2.camera_node:main',
-            'movement_node = pidog_ros2.movement_node:main',
         ],
     },
 )
